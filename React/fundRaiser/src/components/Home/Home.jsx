@@ -7,7 +7,7 @@ import medicalImg from '/src/images/medical-img.png';
 import crowdImg from '/src/images/crowdf-img.png';
 import ellipse from '/src/images/Ellipse 2.svg';
 import useResponsive from '/src/useResponsive';
-import { Link, NavLink } from 'react-router-dom';
+
 import LoginModal from './LoginModal';
 
 function Home() {
