@@ -1,8 +1,10 @@
 import React from "react";
+import {Link} from 'react-router-dom';
 
 function FundCard(props) {
     return (
         <>
+            <Link to="/fund">
             <div className="duration-100 hover:shadow-2xl justify-start flex flex-col md:flex-row shadow overflow-hidden cursor-pointer rounded-3xl m-5 md:m-10 w-96 md:w-auto">
 
                     <div className="w-50 md:w-1/2 md:h-full h-40 m-5 rounded-2xl">
@@ -30,6 +32,7 @@ function FundCard(props) {
                     </div>
                 </div>
             </div>
+            </Link>
         </>
     );
 }
