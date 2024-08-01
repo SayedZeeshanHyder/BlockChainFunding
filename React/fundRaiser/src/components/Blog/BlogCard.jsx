@@ -1,8 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function BlogCard({props}){
     return (
         <>
+        <Link to="/blog_create">
         <div className=" bg-green-200 w-[450px] rounded-2xl shadow-md p-8 flex-col justify-center m-8 cursor-pointer hover:shadow-xl hover:scale-105 duration-100">
                     <div className="font-bold text-2xl text-center">
                         FUNDS TITLE
@@ -17,6 +19,7 @@ function BlogCard({props}){
                         </div>
                     </div>
                 </div>
+                </Link>
         </>
     );
 }

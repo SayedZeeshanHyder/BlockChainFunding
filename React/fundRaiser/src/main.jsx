@@ -11,6 +11,7 @@ import './index.css'
 import ProfileCamp from './components/Profile/ProfileCamp.jsx';
 import ProfileTransaction from './components/Profile/ProfileTransaction.jsx';
 import FundsPage from './components/FundsPage/FundsPage.jsx';
+import BlogCreationPage from './components/Blog/BlogCreate.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
       <Route path='myCampaigns' element={<ProfileCamp />} />
       <Route path='raisefund' element={<FundRaise />} />
       <Route path='blogs' element={<Blog />} />
+      <Route path='blog_create' element={<BlogCreationPage />} />
       <Route path='transactions' element={<ProfileTransaction />} />
       <Route path='fund' element={<FundsPage />} />
     </Route>
