@@ -1,31 +1,60 @@
-import React, { useState, useRef } from 'react';
-import './Home.css';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import "./Home.css";
 import logo from "/src/images/Glorious Purpose.svg";
 import charityImg from "/src/images/charity-img.png";
-import disasterImg from '/src/images/diasater-img.png';
-import medicalImg from '/src/images/medical-img.png';
-import crowdImg from '/src/images/crowdf-img.png';
-import ellipse from '/src/images/Ellipse 2.svg';
-import useResponsive from '/src/useResponsive';
-import { Link, NavLink } from 'react-router-dom';
-import LoginModal from './LoginModal';
+import disasterImg from "/src/images/diasater-img.png";
+import medicalImg from "/src/images/medical-img.png";
+import crowdImg from "/src/images/crowdf-img.png";
+import ellipse from "/src/images/Ellipse 2.svg";
+import useResponsive from "/src/useResponsive";
+import LoginModal from "./LoginModal";
 
 function Home() {
-  const { width } = useResponsive();
-  const [isModalOpen, setModalOpen] = useState(false);
-  const aboutRef = useRef(null); // Step 2: Create a ref for the "About Us" section
+    const { width } = useResponsive();
+    const [isModalOpen, setModalOpen] = useState(false);
+    const aboutRef = useRef(null);
+    const navigate = useNavigate();
 
-  const openModal = () => {
-    setModalOpen(true);
-  };
+    useEffect(() => {
+        const verifyToken = async () => {
+            try {
+                const token = localStorage.getItem('jwtToken');
 
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+                if (token) {
+                    const response = await fetch("http://localhost:5000/auth/verify", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ token }),
+                    });
 
-  const scrollToAbout = () => {
-    aboutRef.current.scrollIntoView({ behavior: 'smooth' }); // Step 3: Scroll to the "About Us" section
-  };
+                    if (!response.ok) {
+                        throw new Error('Failed to verify token');
+                    }
+
+                    const { valid } = await response.json();
+
+                    if (valid) {
+                        navigate("/dashboard");
+                    }
+                }
+            } catch (error) {
+                console.error("Error verifying token:", error);
+            }
+        };
+
+        verifyToken();
+    }, [navigate]);
+
+    const openModal = () => setModalOpen(true);
+
+    const closeModal = () => setModalOpen(false);
+
+    const scrollToAbout = () => {
+        aboutRef.current.scrollIntoView({ behavior: "smooth" });
+    };
 
   return (
     <div className="App">
@@ -49,7 +78,7 @@ function Home() {
       <div className={`quote ${isModalOpen ? 'content-blur' : ''}`}>
         “LETS SUPPORT THOSE IN NEED”
       </div>
-      
+
       <div className={`ellipse ${isModalOpen ? 'content-blur' : ''}`}>
         <img src={ellipse} alt="Ellipse" />
         <AboutSection ref={aboutRef} /> {/* Pass the ref to the AboutSection component */}
