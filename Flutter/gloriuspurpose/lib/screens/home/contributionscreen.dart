@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gloriuspurpose/screens/profile/transactionscreen.dart';
 import 'package:gloriuspurpose/services/localauthservice.dart';
 import 'package:gloriuspurpose/services/sharedprefsservice.dart';
 import '../../colors.dart';
+import '../../controllers/bottomnavcontroller.dart';
 import '../../models/campaignmodel.dart';
 import '../../services/notificationservices/localnotificationservice.dart';
 
 class ContributionScreen extends StatelessWidget {
 
   final CampaignModel campaign;
+  final int ethers;
 
-  ContributionScreen({required this.campaign});
+  ContributionScreen({required this.ethers,required this.campaign});
+
+  final bottomNavController = Get.put(BottomNavController());
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +41,7 @@ class ContributionScreen extends StatelessWidget {
                     children: [
                       ListTile(
                         title: Text("Amount",style: TextStyle(color: Colors.grey.shade500,fontSize: 16),),
-                        trailing: Text("5 ETH",style: TextStyle(fontSize: 16,color: Colors.grey.shade500,),),
+                        trailing: Text("$ethers ETH",style: TextStyle(fontSize: 16,color: Colors.grey.shade500,),),
                       ),
                       ListTile(
                         title: Text("Gas Price",style: TextStyle(color: Colors.grey.shade500,fontSize: 16),),
@@ -44,7 +49,7 @@ class ContributionScreen extends StatelessWidget {
                       ),
                       ListTile(
                         title: Text("Total",style: TextStyle(color: Colors.grey.shade500,fontSize: 16),),
-                        trailing: Text("5.00064 ETH",style: TextStyle(fontSize: 16,color: Colors.grey.shade500,),),
+                        trailing: Text("${ethers + 0.00064} ETH",style: TextStyle(fontSize: 16,color: Colors.grey.shade500,),),
                       ),
                       ListTile(
                         title: Text("Time",style: TextStyle(color: Colors.grey.shade500,fontSize: 16),),
@@ -73,7 +78,16 @@ class ContributionScreen extends StatelessWidget {
                 onTap: ()async{
                   final isAuthenticated = await LocalAuthService.authenticateLocalAuth("Authentication Required before transaction");
                   if(isAuthenticated){
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Authentication Successfull"),),);
+
+                    //Hit the Transaction Api
+                    //The Transaction API
+
+                    Get.back();
+                    Get.back();
+                    bottomNavController.currentIndex.value = 3;
+                    Get.to(()=> TransactionScreen(),);
+
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Authentication Successfull"),backgroundColor: myGreen,),);
                     NotificationService.showLocalNotification("Transaction Successful", "Thank You for contribution to the ${campaign.title} Campaign,Your Contribution is Apprciated", "payload");
                   }else{
                     print(SharedPreferencesServices.getDeviceToken());

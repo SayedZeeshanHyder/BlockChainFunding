@@ -4,7 +4,6 @@ import 'package:gloriuspurpose/controllers/bottomnavcontroller.dart';
 import 'package:gloriuspurpose/screens/blog/writeblogscreen.dart';
 import 'package:gloriuspurpose/screens/createcampaign/introcreation.dart';
 import 'package:gloriuspurpose/services/notificationservices/localnotificationservice.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:gloriuspurpose/colors.dart';
 import 'package:gloriuspurpose/screens/home/homescreen.dart';
 import 'package:gloriuspurpose/screens/profile/profile.dart';
@@ -178,11 +177,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   startScan() async {
     print("started Scan");
-    final scanQr =  await scanner.scan();
+    /*final scanQr =  await scanner.scan();
     if (scanQr != null) {
       print(scanQr);
     } else {
       print("Some Error Occured");
-    }
+    }*/
   }
 }

@@ -18,11 +18,14 @@ class ViewCampaign extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final endYear = int.parse(campaign.endDate.toString().substring(5),);
-    final endDay = int.parse(campaign.endDate.toString().substring(0,2),);
-    final endMonth = int.parse(campaign.endDate.toString().substring(3,4),);
-    final DateTime endTime = DateTime(endYear,endMonth,endDay);
-    print(endTime);
+    print(campaign.toJson());
+    DateTime endTime = DateTime.now();
+    if(!campaign.isAimAmt) {
+      final endYear = int.parse(campaign.endDate.toString().substring(6),);
+      final endDay = int.parse(campaign.endDate.toString().substring(0, 2),);
+      final endMonth = int.parse(campaign.endDate.toString().substring(3, 4),);
+      final DateTime endTime = DateTime(endYear, endMonth, endDay);
+    }
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -151,7 +154,11 @@ class ViewCampaign extends StatelessWidget {
                     FocusManager.instance.primaryFocus?.unfocus();
                   },
                   onChanged: (val){
-                    buttonController.ethers.value = val;
+                    if(val.isEmpty){
+                      buttonController.ethers.value = 0;
+                    }else{
+                      buttonController.ethers.value = int.parse(val);
+                    }
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -185,8 +192,8 @@ class ViewCampaign extends StatelessWidget {
 
               Obx(
                   ()=> InkWell(
-                  onTap: buttonController.ethers.value.isNotEmpty ? (){
-                    Get.to(()=> ContributionScreen(campaign: campaign,),transition: Transition.rightToLeft);
+                  onTap: buttonController.ethers.value!=0 ? (){
+                    Get.to(()=> ContributionScreen(ethers: buttonController.ethers.value,campaign: campaign,),transition: Transition.rightToLeft);
                   } : null,
                   child: Container(
                     alignment: Alignment.center,
@@ -194,7 +201,7 @@ class ViewCampaign extends StatelessWidget {
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: buttonController.ethers.value.isNotEmpty ? myGreen : Colors.grey.shade400,
+                      color: buttonController.ethers.value!=0 ? myGreen : Colors.grey.shade400,
                     ),
                     child: Text("Contribute to the Campaign",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                   ),

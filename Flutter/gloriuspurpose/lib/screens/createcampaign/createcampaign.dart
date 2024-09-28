@@ -580,7 +580,6 @@ class _CreateCampaignState extends State<CreateCampaign> {
       case 7: createCampaignController.category.value = "Senior Services";break;
       case 8: createCampaignController.category.value = "Military Support";break;
       case 9: createCampaignController.category.value = "Religious";break;
-      default: createCampaignController.category.value = "";
     }
   }
 }

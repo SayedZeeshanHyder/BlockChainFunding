@@ -62,11 +62,13 @@ class CampaignCard extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: InkWell(
-                  onTap: () => Get.to(
-                          () => ViewCampaign(
-                        campaign: model,
-                      ),
-                      transition: Transition.rightToLeft),
+                  onTap: (){
+                    Get.to(
+                            () => ViewCampaign(
+                          campaign: model,
+                        ),
+                        transition: Transition.rightToLeft);
+                  },
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(

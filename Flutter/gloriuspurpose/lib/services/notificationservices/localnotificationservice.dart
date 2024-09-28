@@ -17,7 +17,7 @@ class NotificationService {
     print("LocalNotification Initialized Successfully");
   }
 
-  static showLocalNotification(String title, String body,String payload) {
+  static void showLocalNotification(String title, String body,String payload) {
     const androidNotificationDetail = AndroidNotificationDetails(
       '0',
       'general' ,
