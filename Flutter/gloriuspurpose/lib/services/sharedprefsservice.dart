@@ -42,5 +42,13 @@ class SharedPreferencesServices
     return deviceToken;
   }
 
+  static setGoogleSignIn(bool signInStatus) async{
+    await prefs.setBool("googleAuth",signInStatus);
+  }
+
+  static bool getGoogleSignIn(){
+    return prefs.getBool("googleAuth") ?? false;
+  }
+
 
 }

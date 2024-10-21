@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:gloriuspurpose/services/sharedprefsservice.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService
@@ -28,7 +28,14 @@ class AuthService
     if(user.user == null){
       return false;
     }
+    await SharedPreferencesServices.setGoogleSignIn(true);
     return true;
+  }
+
+  static logOut()async{
+    await _googleSignIn.signOut();
+    await _auth.signOut();
+    await SharedPreferencesServices.setGoogleSignIn(false);
   }
 
   static Future<bool> createAccountUsingEmail(String email,String password,String imgPath)async{

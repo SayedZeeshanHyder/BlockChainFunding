@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gloriuspurpose/apivariables.dart';
 import 'package:gloriuspurpose/colors.dart';
+import 'package:gloriuspurpose/services/sharedprefsservice.dart';
 import 'package:http/http.dart' as http;
 
 class CheckBalance extends StatefulWidget {
@@ -13,8 +17,24 @@ class _CheckBalanceState extends State<CheckBalance> {
   
   double balance = 0.0;
   bool isLoading = true;
-  String privateKey = "0xc74e029097668f17d12681f7b9abb151a48851086a854dec5d26ed5a9382b78e";
-  String accountAddress = "0x480231631d4c7Bb6D3917D58AEB46fEF6e08C607";
+  String privateKey = "";
+  String accountAddress = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getBalance();
+  }
+
+  getBalance()async{
+    privateKey = SharedPreferencesServices.getPrivateKey();
+    accountAddress = SharedPreferencesServices.getAccountAddress();
+    print(privateKey);
+    final resp = await http.get(Uri.parse("$getBalanceApi/0x6fe670fcce1af7c72adf2ba0130380b1c1cdfc5df88668f8b848ce48dd741df2"),headers: headers);
+    balance = jsonDecode(resp.body).toDouble();
+    isLoading = false;
+    setState(() {});
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -31,9 +51,9 @@ class _CheckBalanceState extends State<CheckBalance> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Balance",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 23,color: Colors.white),),
-              Text("$balance",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w600),),
+              Text("$balance ETH",style: TextStyle(fontSize: 38,color: Colors.white,fontWeight: FontWeight.w600),),
               SizedBox(
-                height: 20,
+                height: 100,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

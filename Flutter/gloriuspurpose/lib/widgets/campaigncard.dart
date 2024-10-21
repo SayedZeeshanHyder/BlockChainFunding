@@ -16,6 +16,7 @@ class CampaignCard extends StatelessWidget {
       width: size.width,
       margin: EdgeInsets.symmetric(horizontal: size.width * 0.04,),
       child: Card(
+        elevation: 10,
         child: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: size.width * 0.03, vertical: size.height * 0.02),

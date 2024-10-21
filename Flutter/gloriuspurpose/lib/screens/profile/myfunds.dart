@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:gloriuspurpose/services/sharedprefsservice.dart';
 import '../../colors.dart';
 import '../../models/campaignmodel.dart';
 import '../../widgets/campaigncard.dart';
@@ -16,7 +16,7 @@ class MyFunds extends StatelessWidget {
         title: const Text("My Funds"),
       ),
       body: StreamBuilder(
-        stream: firestore.collection("Campaigns").doc("UserUid").snapshots(),
+        stream: firestore.collection("Campaigns").doc("allCampaigns").snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -32,15 +32,19 @@ class MyFunds extends StatelessWidget {
           }catch(e){
             return const Center(child: Text("You havent raised any Campaigns yet",style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),);
           }
+          final accountAddress = SharedPreferencesServices.getAccountAddress();
 
           return ListView.builder(
             physics: const BouncingScrollPhysics(),
             itemCount: data.length,
             itemBuilder: (context, index) {
               final campaign = CampaignModel.fromJson(data[index]);
-              return CampaignCard(
+              if(campaign.accountAddress == accountAddress)
+                return CampaignCard(
                 model: campaign,
               );
+              else
+                SizedBox();
             },
           );
         },

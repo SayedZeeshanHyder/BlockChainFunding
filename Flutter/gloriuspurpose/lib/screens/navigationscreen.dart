@@ -7,6 +7,7 @@ import 'package:gloriuspurpose/services/notificationservices/localnotificationse
 import 'package:gloriuspurpose/colors.dart';
 import 'package:gloriuspurpose/screens/home/homescreen.dart';
 import 'package:gloriuspurpose/screens/profile/profile.dart';
+import 'package:gloriuspurpose/screens/blog/BlogHomeScreen.dart';
 
 class NavigationScreen extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   List<Widget> pages = [
     HomeScreen(),
     IntroCreation(),
-    WriteBlogScreen(),
+    BlogHomeScreen(),
     Profile(),
   ];
 

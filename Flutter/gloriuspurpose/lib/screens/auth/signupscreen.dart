@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:gloriuspurpose/colors.dart';
 import 'package:gloriuspurpose/screens/auth/loginscreen.dart';
 import 'package:gloriuspurpose/screens/auth/walletscreen.dart';
+import 'package:gloriuspurpose/services/authservice.dart';
 
 class SignUpScreen extends StatelessWidget {
 
@@ -63,7 +64,12 @@ class SignUpScreen extends StatelessWidget {
                 height: size.height*0.055,
                 child: GoogleAuthButton(
                   onPressed: ()async{
-                    // Google Sign In Feature
+                    final isGoogleSignedIn = await AuthService.signInUsingGoogle();
+                    if(isGoogleSignedIn){
+                      Get.to(()=>WalletScreen(),transition: Transition.rightToLeft);
+                    }else{
+                      Get.showSnackbar(GetSnackBar(message: "Failed to Sign In",title: "Couldnot Sign in using Google at the Moment",),);
+                    }
                   },
                 ),
               ),

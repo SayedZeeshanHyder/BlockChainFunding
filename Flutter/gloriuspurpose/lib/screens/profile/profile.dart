@@ -6,6 +6,7 @@ import 'package:gloriuspurpose/screens/auth/signupscreen.dart';
 import 'package:gloriuspurpose/screens/profile/myfunds.dart';
 import 'package:gloriuspurpose/screens/profile/settingscreen.dart';
 import 'package:gloriuspurpose/screens/profile/transactionscreen.dart';
+import 'package:gloriuspurpose/services/authservice.dart';
 import 'package:gloriuspurpose/services/localauthservice.dart';
 
 import 'checkbalance.dart';
@@ -180,6 +181,7 @@ class Profile extends StatelessWidget {
                 child: ListTile(
                   onTap: ()async{
                     // Log Out Function
+                    await AuthService.logOut();
                     Get.off(()=> SignUpScreen(),transition: Transition.leftToRight);
                   },
                   textColor: Colors.white,

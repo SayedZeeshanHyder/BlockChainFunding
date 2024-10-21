@@ -1,9 +1,16 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gloriuspurpose/apivariables.dart';
+import 'package:gloriuspurpose/models/TransactionResponse.dart';
 import 'package:gloriuspurpose/screens/profile/transactionscreen.dart';
 import 'package:gloriuspurpose/services/localauthservice.dart';
 import 'package:gloriuspurpose/services/sharedprefsservice.dart';
 import '../../colors.dart';
+import 'package:http/http.dart' as http;
 import '../../controllers/bottomnavcontroller.dart';
 import '../../models/campaignmodel.dart';
 import '../../services/notificationservices/localnotificationservice.dart';
@@ -16,6 +23,8 @@ class ContributionScreen extends StatelessWidget {
   ContributionScreen({required this.ethers,required this.campaign});
 
   final bottomNavController = Get.put(BottomNavController());
+  final auth = FirebaseAuth.instance;
+  final firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -52,16 +61,16 @@ class ContributionScreen extends StatelessWidget {
                         trailing: Text("${ethers + 0.00064} ETH",style: TextStyle(fontSize: 16,color: Colors.grey.shade500,),),
                       ),
                       ListTile(
-                        title: Text("Time",style: TextStyle(color: Colors.grey.shade500,fontSize: 16),),
+                        title: Text("Date",style: TextStyle(color: Colors.grey.shade500,fontSize: 16),),
                         trailing: Text("${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",style: TextStyle(fontSize: 16,color: Colors.grey.shade500,),),
                       ),
                       ListTile(
                         title: Text("From",style: TextStyle(color: Colors.grey.shade500,fontSize: 16),),
-                        trailing: Text("0x3EE******************",style: TextStyle(fontSize: 16,color: Colors.grey.shade500,),),
+                        trailing: Text("${SharedPreferencesServices.getAccountAddress().substring(0,4)}******************",style: TextStyle(fontSize: 16,color: Colors.grey.shade500,),),
                       ),
                       ListTile(
                         title: Text("To",style: TextStyle(color: Colors.grey.shade500,fontSize: 16),),
-                        trailing: Text("0x3EE******************",style: TextStyle(fontSize: 16,color: Colors.grey.shade500,),),
+                        trailing: Text("${campaign.accountAddress.substring(0,4)}******************",style: TextStyle(fontSize: 16,color: Colors.grey.shade500,),),
                       ),
                     ],
                   ),
@@ -79,6 +88,7 @@ class ContributionScreen extends StatelessWidget {
                   final isAuthenticated = await LocalAuthService.authenticateLocalAuth("Authentication Required before transaction");
                   if(isAuthenticated){
 
+                    await transferMoney(campaign.accountAddress);
                     //Hit the Transaction Api
                     //The Transaction API
 
@@ -134,5 +144,27 @@ class ContributionScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  transferMoney(String accountAddress)async{
+    final body = {
+      "amount":ethers,
+      "privateKey":SharedPreferencesServices.getPrivateKey(),
+      "recipent":accountAddress
+    };
+    final resp = await http.post(Uri.parse(transferApi),headers:headers,body: jsonEncode(body),);
+    final transactionJson = jsonDecode(resp.body);
+    transactionJson['amount']=ethers;
+    TransactionResponse response = TransactionResponse.fromJson(transactionJson);
+    await updateTransaction(response);
+  }
+
+  updateTransaction(TransactionResponse response)async{
+    final get = await firestore.collection("Users").doc(auth.currentUser!.uid).get();
+    List listOfTransactions = get.exists ? get.data()!['transactions'] : [];
+    listOfTransactions.add(response.toJson());
+    await firestore.collection("Users").doc(auth.currentUser!.uid).set({
+      "transactions":listOfTransactions
+    });
   }
 }
